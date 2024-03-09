@@ -252,7 +252,10 @@ export async function run({
                 hidden: pdoc.is_public !== 1,
                 tag: tagList,
             });
-            configMap[`P${pdoc.id}`] = `type: ${({ traditional: 'default', 'submit-answer': 'submit_answer' })[pdoc.type] || pdoc.type}
+            if (pdoc.type == 'remote') 
+                configMap[`P${pdoc.id}`] = `type: remote_judge\nsource: ${pdoc.source}`;
+            else 
+                configMap[`P${pdoc.id}`] = `type: ${({ traditional: 'default', 'submit-answer': 'submit_answer' })[pdoc.type] || pdoc.type}
 \ntime: ${pdoc.time_limit}ms\nmemory: ${pdoc.memory_limit}m${pdoc.file_io ? `\nfilename: ${pdoc.file_io_input_name.split('.')[0]}` : ''}`;
             if (pdoc.additional_file_id) {
                 const additionalFile = await query(`SELECT * FROM \`file\` WHERE \`id\` = ${pdoc.additional_file_id}`);
