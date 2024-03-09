@@ -365,8 +365,8 @@ export async function run({
                                     status: curCase.status === 2 ? TestcaseJudgeStatusMap[curCase.result.type] : TestcaseStatusMap[curCase.status],
                                 });
                             }
-                        } catch {
-                            
+                        } catch(e) {
+                            report({message: `error at r ${rdoc.id}`})
                         }
                     }
                 }
