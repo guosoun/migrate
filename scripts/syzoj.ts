@@ -74,6 +74,7 @@ const langMap = {
     nodejs: 'js',
     ruby: 'rb',
     haskell: 'hs',
+    'cpp14-noi': 'cc.cc14'
 };
 export async function run({
     host = 'localhost', port = 3306, name = 'syzoj',
