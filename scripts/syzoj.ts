@@ -366,7 +366,7 @@ export async function run({
                                 });
                             }
                         } catch(e) {
-                            report({message: `error at r ${rdoc.id}`})
+                            report({message: `error at r ${rdoc.id} ${e}`})
                         }
                     }
                 }
