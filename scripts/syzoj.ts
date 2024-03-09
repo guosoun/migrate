@@ -346,29 +346,32 @@ export async function run({
                 rejudged: false,
                 judger: 1,
             };
-            // const judgeState = JSON.parse(rdoc.result);
-            // // console.log(rdoc, judgeState);
-            // if (judgeState) {
-            //     if (judgeState.compile?.message) data.compilerTexts.push(judgeState.compile.message.replace(/<.+?>/g, ''));
-            //     if (judgeState.judge) {
-            //         for (let i = 0; i < judgeState.judge.subtasks.length; i++) {
-            //             const subtask = judgeState.judge.subtasks.length[i];
-            //             for (let j = 0; j < subtask.cases.length; j++) {
-            //                 const curCase = subtask.cases[j];
-            //                 data.testCases.push({
-            //                     subtaskId: i + 1,
-            //                     id: j + 1,
-            //                     score: Math.trunc((curCase.result?.scoringRate || 0) * 100),
-            //                     time: curCase.result?.time || 0,
-            //                     memory: curCase.result?.memory || 0,
-            //                     message: curCase.result?.spjMessage || curCase.result?.systemMessage || curCase.result?.userError || '',
-            //                     status: curCase.status === 2 ? TestcaseJudgeStatusMap[curCase.result.type] : TestcaseStatusMap[curCase.status],
-            //                 });
-            //             }
-            //         }
-            //     }
-            // }
-            if (rdoc.type == 1) {
+            const judgeState = JSON.parse(rdoc.result);
+            if (judgeState) {
+                if (judgeState.compile?.message) data.compilerTexts.push(judgeState.compile.message.replace(/<.+?>/g, ''));
+                if (judgeState.judge) {
+                    for (let i = 0; i < judgeState.judge.subtasks.length; i++) {
+                        const subtask = judgeState.judge.subtasks.length[i];
+                        try {
+                            for (let j = 0; j < subtask.cases.length; j++) {
+                                const curCase = subtask.cases[j];
+                                data.testCases.push({
+                                    subtaskId: i + 1,
+                                    id: j + 1,
+                                    score: Math.trunc((curCase.result?.scoringRate || 0) * 100),
+                                    time: curCase.result?.time || 0,
+                                    memory: curCase.result?.memory || 0,
+                                    message: curCase.result?.spjMessage || curCase.result?.systemMessage || curCase.result?.userError || '',
+                                    status: curCase.status === 2 ? TestcaseJudgeStatusMap[curCase.result.type] : TestcaseStatusMap[curCase.status],
+                                });
+                            }
+                        } catch {
+                            
+                        }
+                    }
+                }
+            }
+            if (rdoc.type) {
                 data.contest = new ObjectId(tidMap[rdoc.type_info]);
                 await ContestModel.attend(domainId, data.contest, uidMap[rdoc.user_id]).catch(noop);
             }
