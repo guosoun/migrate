@@ -346,16 +346,13 @@ export async function run({
                 rejudged: false,
                 judger: 1,
             };
+            report({ message: `${rdoc.id}`});
             const judgeState = JSON.parse(rdoc.result);
             if (judgeState) {
                 if (judgeState.compile?.message) data.compilerTexts.push(judgeState.compile.message.replace(/<.+?>/g, ''));
                 if (judgeState.judge) {
                     for (let i = 0; i < judgeState.judge.subtasks.length; i++) {
                         const subtask = judgeState.judge.subtasks.length[i];
-                        if (!subtask.cases) {
-                            console.log(rdoc.id);
-                            continue;
-                        }
                         for (let j = 0; j < subtask.cases.length; j++) {
                             const curCase = subtask.cases[j];
                             data.testCases.push({
